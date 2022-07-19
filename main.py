@@ -134,18 +134,28 @@ def pickAPrize(prizeList: list):
     ## Sets Default best prize to the first in the list
     highestOddmentsPrize = prizeList[0]
 
+    # defualt
+    # [blue x1, red x4, yellow x2]
+    # [red x4, blue x1,yellow x2,]
+# ultra, fairly, uncommon
     x = 0
     ## Loop the other 2 values
     while x < len(prizeList) - 1:
         ## Override if a blue is found to make it auto best. Will skip if they are both blue and compare oddments.
-        if highestOddmentsPrize[0].get('name') != 'ultraRare' and prizeList[x+1][0].get('name') == 'ultraRare':
+        if highestOddmentsPrize[0].get('name') == 'ultraRare' and prizeList[x+1][0].get('name') != 'ultraRare':
             highestOddmentsPrize = highestOddmentsPrize
+            # highestOddmentsPrize = prizeList[x+1]
+
+        elif highestOddmentsPrize[0].get('name') != 'ultraRare' and prizeList[x+1][0].get('name') == 'ultraRare':
             highestOddmentsPrize = prizeList[x+1]
+
         elif calcOddments(highestOddmentsPrize[0].get('oddments'), highestOddmentsPrize[2]) >= calcOddments(prizeList[x + 1][0].get('oddments'), prizeList[x + 1][2]):
-            highestOddmentsPrize = prizeList[x]
-        else:
+            highestOddmentsPrize = highestOddmentsPrize
+
+        elif calcOddments(highestOddmentsPrize[0].get('oddments'), highestOddmentsPrize[2]) < calcOddments(prizeList[x + 1][0].get('oddments'), prizeList[x + 1][2]):
             highestOddmentsPrize = prizeList[x + 1]
-        
+        else:
+            print('error', prizeList)
         x+=1
     ## return best prize
     return highestOddmentsPrize
@@ -180,8 +190,9 @@ def foresightPromo(keys: int) -> list:
             prizeRollInfo = (gemRolled, prizeRoll, multiRolled)
             # Adds gem/prize info to prizesRolled list for later.
             prizesRolled.append(prizeRollInfo)
-
+            
         ## The Best prize for the set of 3 from above is input into the pickAPrize() function, appends returned prize to final prizes list
+        # print(f'Begin set of Prize rolls {prizesRolled}')
         finalPrizePicked.append(pickAPrize(prizesRolled))
     # Returns finalPrizesPicked List
     return finalPrizePicked
@@ -248,9 +259,28 @@ def runTHsimm(keys: int):
 
 ## Change this to decide how many keys to run in the sim. 
 
-keys = 1000000
+keys = 10000000
 runTHsimm(keys)
 
+# def testingPrizePicker():
+
+#     ## Testing picking ultra rare
+#     testSet = [({'name': 'fairlyCommon', 'gemWeight': 66.827, 'oddments': (25, 60), 'prizes': {'lamp': 10.159, 'star': 12.44, 'proteans': 8.904, 'cashBag': 6.478, 'spring': 4.178, 'silverhawk': 4.178, 'skillPack': 4.178, 'magicNote': 4.178, 'D&DweekReset': 4.178, 'tokenBox': 4.178, 'combatDummy': 11.635, 'spiritDragonstone': 11.635, 'divineLocation': 13.681}}, 'tokenBox', 1), ({'name': 'fairlyCommon', 'gemWeight': 66.827, 'oddments': (25, 60), 'prizes': {'lamp': 10.159, 'star': 12.44, 'proteans': 8.904, 'cashBag': 6.478, 'spring': 4.178, 'silverhawk': 4.178, 'skillPack': 4.178, 'magicNote': 4.178, 'D&DweekReset': 4.178, 'tokenBox': 4.178, 'combatDummy': 11.635, 'spiritDragonstone': 11.635, 'divineLocation': 13.681}}, 'cashBag', 3), ({'name': 'ultraRare', 'gemWeight': 0.004, 'oddments': (500, 1750), 'prizes': {'supKnowlegeBombs': 25, 'boxDeathtoughDart': 25, 'boxProteanProc': 25, 'boxDummyProc': 25}}, 'boxDeathtoughDart', 2)]
+#     testSet2 = [({'name': 'uncommon', 'gemWeight': 24.095, 'oddments': (50, 120), 'prizes': {'lamp': 14.32, 'star': 17.531, 'proteans': 12.347, 'cashBag': 1.992, 'spring': 4.54, 'silverhawk': 4.54, 'skillPack': 4.54, 'magicNote': 4.54, 'D&DmonthReset': 4.54, 'tokenBox': 4.54, 'combatDummy': 12.654, 'spiritOnyx': 12.654, 'mediumSkillCrate': 1.262}}, 'lamp', 1), ({'name': 'ultraRare', 'gemWeight': 0.004, 'oddments': (500, 1750), 'prizes': {'supKnowlegeBombs': 25, 'boxDeathtoughDart': 25, 'boxProteanProc': 25, 'boxDummyProc': 25}}, 'boxProteanProc', 3), ({'name': 'uncommon', 'gemWeight': 24.095, 'oddments': (50, 120), 'prizes': {'lamp': 14.32, 'star': 17.531, 'proteans': 12.347, 'cashBag': 1.992, 'spring': 4.54, 'silverhawk': 4.54, 'skillPack': 4.54, 'magicNote': 4.54, 'D&DmonthReset': 4.54, 'tokenBox': 4.54, 'combatDummy': 12.654, 'spiritOnyx': 12.654, 'mediumSkillCrate': 1.262}}, 'star', 2)]
+#     testSet3 = [({'name': 'ultraRare', 'gemWeight': 0.004, 'oddments': (500, 1750), 'prizes': {'supKnowlegeBombs': 25, 'boxDeathtoughDart': 25, 'boxProteanProc': 25, 'boxDummyProc': 25}}, 'supKnowlegeBombs', 2), ({'name': 'fairlyCommon', 'gemWeight': 66.827, 'oddments': (25, 60), 'prizes': {'lamp': 10.159, 'star': 12.44, 'proteans': 8.904, 'cashBag': 6.478, 'spring': 4.178, 'silverhawk': 4.178, 'skillPack': 4.178, 'magicNote': 4.178, 'D&DweekReset': 4.178, 'tokenBox': 4.178, 'combatDummy': 11.635, 'spiritDragonstone': 11.635, 'divineLocation': 13.681}}, 'spiritDragonstone', 3), ({'name': 'uncommon', 'gemWeight': 24.095, 'oddments': (50, 120), 'prizes': {'lamp': 14.32, 'star': 17.531, 'proteans': 12.347, 'cashBag': 1.992, 'spring': 4.54, 'silverhawk': 4.54, 'skillPack': 4.54, 'magicNote': 4.54, 'D&DmonthReset': 4.54, 'tokenBox': 4.54, 'combatDummy': 12.654, 'spiritOnyx': 12.654, 'mediumSkillCrate': 1.262}}, 'combatDummy', 5)]
 
 
+#     blue = ({'name': 'ultraRare', 'gemWeight': 0.004, 'oddments': (500, 1750), 'prizes': {'supKnowlegeBombs': 25, 'boxDeathtoughDart': 25, 'boxProteanProc': 25, 'boxDummyProc': 25}}, 'supKnowlegeBombs', 2)
+#     testSet4 = [({'name': 'veryRare', 'gemWeight': 1.885, 'oddments': (250, 850), 'prizes': {'lamp': 29.496, 'star': 36.127, 'proteans': 12.626, 'cashBag': 1.91, 'cashBag50mil': 0.106, 'spring': 6.048, 'silverhawk': 6.048, 'skillPack': 6.048, 'largeSkillCrate': 1.591}}, 'cashBag', 5), ({'name': 'fairlyCommon', 'gemWeight': 66.827, 'oddments': (25, 60), 'prizes': {'lamp': 10.159, 'star': 12.44, 'proteans': 8.904, 'cashBag': 6.478, 'spring': 4.178, 'silverhawk': 4.178, 'skillPack': 4.178, 'magicNote': 4.178, 'D&DweekReset': 4.178, 'tokenBox': 4.178, 'combatDummy': 11.635, 'spiritDragonstone': 11.635, 'divineLocation': 13.681}}, 'lamp', 1), ({'name': 'ultraRare', 'gemWeight': 0.004, 'oddments': (500, 1750), 'prizes': {'supKnowlegeBombs': 25, 'boxDeathtoughDart': 25, 'boxProteanProc': 25, 'boxDummyProc': 25}}, 'supKnowlegeBombs', 2)]
+
+#     ## Testing 
+#     tests = [testSet, testSet2, testSet3, testSet4]
+
+#     for test in tests:
+#         print(f'This is test number {tests.index(test) + 1}\n')
+#         for choice in test:
+#             print(f'This is choice {test.index(choice) + 1}:\n {choice} \n')
+#         print(f'The best prize is {pickAPrize(test)}\n')
+
+# testingPrizePicker()
 
