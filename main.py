@@ -259,7 +259,7 @@ def runTHsimm(keys: int):
 
 ## Change this to decide how many keys to run in the sim. 
 
-keys = 10000000
+keys = 10000
 runTHsimm(keys)
 
 # def testingPrizePicker():
